@@ -25,6 +25,7 @@ export { getVocabularyReadings } from "./get-vocabulary-readings";
 export { isQuizType } from "./is-quiz-type";
 export { isSubjectType } from "./is-subject-type";
 export { isSubscriptionValid } from "./is-subscription-valid";
+export { mergeSrsStages } from "./merge-srs-stages";
 export { parseSlug } from "./parse-slug";
 export { shuffleArray } from "./shuffle-array";
 export { sortByIdAndLevel } from "./sort-by-id-and-level";
