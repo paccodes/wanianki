@@ -1,5 +1,6 @@
 export {
   type Fetcher,
+  getAssignmentCollection,
   getKanjiCollection,
   getRadicalCollection,
   getUserReport,

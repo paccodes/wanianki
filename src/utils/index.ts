@@ -3,6 +3,7 @@ export { capitalize } from "./capitalize";
 export { clamp } from "./clamp";
 export { fetchAllPages } from "./fetch-all-pages";
 export { getAcceptedProperties } from "./get-accepted-properties";
+export { getAssignmentsUrl } from "./get-assignments-url";
 export { getDiceCoefficient } from "./get-dice-coefficient";
 export { getEmptyQuizReport } from "./get-empty-quiz-report";
 export { getErrorMessage } from "./get-error-message";

@@ -1,3 +1,4 @@
+export type { Assignment, AssignmentResponse } from "./assignment";
 export type { CachedData } from "./cache";
 export type { Deck } from "./deck";
 export type { Error } from "./error";

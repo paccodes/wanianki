@@ -1,6 +1,7 @@
 import type { AxiosResponse } from "axios";
 
 import type {
+  AssignmentResponse,
   Kanji,
   Radical,
   Response,
@@ -8,7 +9,7 @@ import type {
   User,
   Vocabulary,
 } from "../types";
-import { getSubjectsUrl } from "../utils";
+import { getAssignmentsUrl, getSubjectsUrl } from "../utils";
 
 import { axiosClient } from "./axios-client";
 
@@ -44,6 +45,14 @@ export function getVocabularyCollection(startLevel: number, endLevel: number) {
   return function (url: string | null) {
     return getResource<SubjectResponse<Vocabulary>>(
       url ?? getSubjectsUrl(startLevel, endLevel, "vocabulary"),
+    );
+  };
+}
+
+export function getAssignmentCollection(startLevel: number, endLevel: number) {
+  return function (url: string | null) {
+    return getResource<AssignmentResponse>(
+      url ?? getAssignmentsUrl(startLevel, endLevel),
     );
   };
 }
