@@ -1,4 +1,8 @@
-export type { Assignment, AssignmentResponse } from "./assignment";
+export type {
+  Assignment,
+  AssignmentResponse,
+  SrsStageFilter,
+} from "./assignment";
 export type { CachedData } from "./cache";
 export type { Deck } from "./deck";
 export type { Error } from "./error";
@@ -18,6 +22,7 @@ export type {
   ReviewSubject,
   Subject,
   SubjectResponse,
+  SubjectResponseWithSrsStage,
   SubjectType,
 } from "./subject";
 export type { Subscription } from "./subscription";

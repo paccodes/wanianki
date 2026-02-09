@@ -8,7 +8,7 @@ import {
 } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import type { Subject, SubjectResponse } from "../types";
+import type { Subject, SubjectResponseWithSrsStage } from "../types";
 import { getSubjectFromSlug, parseSlug } from "../utils";
 
 import { useReviewNavigationPaths } from "./use-review-navigation-paths";
@@ -19,7 +19,7 @@ interface ReturnValue<T> {
 }
 
 export const useStudyNavigation = <T extends Subject>(
-  subjectCollection: ShallowRef<SubjectResponse<T>[]>,
+  subjectCollection: ShallowRef<SubjectResponseWithSrsStage<T>[]>,
 ): ReturnValue<T> => {
   const route = useRoute();
   const router = useRouter();

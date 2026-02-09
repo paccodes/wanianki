@@ -10,6 +10,7 @@ export { useQuizNavigation } from "./use-quiz-navigation";
 export { useQuizReport } from "./use-quiz-report";
 export { useQuizSummary } from "./use-quiz-summary";
 export { useRefreshData } from "./use-refresh-data";
+export { useSrsStages } from "./use-srs-stages";
 export { useReviewCounter } from "./use-review-counter";
 export { useReviewSelection } from "./use-review-selection";
 export { useStudyNavigation } from "./use-study-navigation";

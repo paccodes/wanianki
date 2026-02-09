@@ -1,7 +1,7 @@
 import { computed, type ComputedRef, ref, type Ref, watch } from "vue";
 
-import type { ReviewSubject, SubjectType } from "../types";
-import { clamp, getSubjectQueryString } from "../utils";
+import type { ReviewSubject, SrsStageFilter, SubjectType } from "../types";
+import { clamp, getSubjectQueryString, matchesSrsFilters } from "../utils";
 
 import { subjectCollection } from "./use-learning-material";
 
@@ -27,6 +27,7 @@ interface ReturnValue {
     type: SubjectType;
     minLevel: number;
     maxLevel: number;
+    srsStages: SrsStageFilter[];
   }>;
   filteredSubjectsByLevel: ComputedRef<Record<number, ReviewSubject[]>>;
   visibleLevels: ComputedRef<number[]>;
@@ -62,10 +63,12 @@ export const useSubjectSelection = ({
     type: SubjectType;
     minLevel: number;
     maxLevel: number;
+    srsStages: SrsStageFilter[];
   }>({
     type: "kanji",
     minLevel: 1,
     maxLevel: level.value || 1,
+    srsStages: [],
   });
 
   const availableSubjects = computed<ReviewSubject[]>(
@@ -78,6 +81,10 @@ export const useSubjectSelection = ({
         subject.data.level < filters.value.minLevel ||
         subject.data.level > filters.value.maxLevel
       ) {
+        return false;
+      }
+
+      if (!matchesSrsFilters(subject.srs_stage, filters.value.srsStages)) {
         return false;
       }
 
@@ -117,7 +124,9 @@ export const useSubjectSelection = ({
       levels.push(level);
     }
 
-    return levels;
+    return levels.filter(
+      (level) => !!filteredSubjectsByLevel.value[level]?.length,
+    );
   });
 
   const firstOpenLevel = computed<number>(

@@ -2,6 +2,8 @@ import type { Kanji } from "./kanji";
 import type { Radical } from "./radical";
 import type { Vocabulary } from "./vocabulary";
 
+export type SubjectType = "kanji" | "radical" | "vocabulary";
+
 interface AuxiliaryMeaning {
   meaning: string;
   type: "whitelist" | "blacklist";
@@ -28,6 +30,10 @@ export interface SubjectResponse<T> {
   data: T;
 }
 
-export type SubjectType = "kanji" | "radical" | "vocabulary";
+export interface SubjectResponseWithSrsStage<T> extends SubjectResponse<T> {
+  srs_stage?: number;
+}
 
-export type ReviewSubject = SubjectResponse<Radical | Kanji | Vocabulary>;
+export type ReviewSubject = SubjectResponseWithSrsStage<
+  Radical | Kanji | Vocabulary
+>;

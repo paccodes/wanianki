@@ -38,6 +38,7 @@ export const useLogin = (): ReturnValue => {
     errorMessage: "Failed to load user profile",
     successMessage: "Authenticated successfully",
     shouldFetchOnMounted: false,
+    shouldSaveToOpfs: true,
     fetcher: getUserReport,
     onComplete,
   });
@@ -52,6 +53,7 @@ export const useLogin = (): ReturnValue => {
 
       if (userData && !isSubscriptionValid(userData?.subscription)) {
         addNotification("But ouch, invalid user subscription", "error");
+
         await setUser(null);
       } else {
         user.value = userData;

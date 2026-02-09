@@ -3,7 +3,7 @@ import { toRomaji } from "wanakana";
 import type {
   Kanji,
   ReviewSubject,
-  SubjectResponse,
+  SubjectResponseWithSrsStage,
   Vocabulary,
 } from "../types";
 
@@ -15,9 +15,9 @@ export const getSubjectQueryString = (subject: ReviewSubject): string => {
   const readings =
     subject.object === "radical"
       ? ""
-      : (subject as SubjectResponse<Kanji | Vocabulary>).data.readings.map(
-          ({ reading }) => toRomaji(reading),
-        );
+      : (
+          subject as SubjectResponseWithSrsStage<Kanji | Vocabulary>
+        ).data.readings.map(({ reading }) => toRomaji(reading));
 
   return [...meanings, ...readings].join(" ");
 };

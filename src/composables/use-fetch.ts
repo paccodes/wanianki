@@ -12,6 +12,7 @@ interface Params<T, U extends ResponseType> {
   errorMessage: string;
   successMessage: string;
   shouldFetchOnMounted: boolean;
+  shouldSaveToOpfs: boolean;
   fetcher: Fetcher<T>;
   onComplete?: (data: ReportOrCollection<T, U> | null) => void;
 }
@@ -26,6 +27,7 @@ export const useFetch = <T, U extends ResponseType>({
   errorMessage,
   successMessage,
   shouldFetchOnMounted,
+  shouldSaveToOpfs,
   fetcher,
   onComplete,
 }: Params<T, U>): ReturnValue<T, U> => {
@@ -57,7 +59,9 @@ export const useFetch = <T, U extends ResponseType>({
     try {
       data.value = await fetchAllPages<T, U>(fetcher);
 
-      await setValue(data.value);
+      if (shouldSaveToOpfs) {
+        await setValue(data.value);
+      }
 
       addNotification(successMessage, "success");
     } catch (error) {

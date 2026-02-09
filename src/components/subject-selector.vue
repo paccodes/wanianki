@@ -2,13 +2,27 @@
 import { computed, toRef } from "vue";
 
 import { useSubjectSelection } from "../composables";
-import type { ReviewSubject, SubjectType } from "../types";
+import type { ReviewSubject, SrsStageFilter, SubjectType } from "../types";
 import { capitalize, getPluralizedQuantity } from "../utils";
 
 import BaseButton from "./base-button.vue";
+import BaseDropdown, { type DropdownOption } from "./base-dropdown.vue";
 import SubjectCard from "./subject-card.vue";
 import SubjectChip from "./subject-chip.vue";
 import SubjectSuggestion from "./subject-suggestion.vue";
+
+const srsStageOptions: DropdownOption<SrsStageFilter>[] = [
+  { value: "locked", label: "Locked" },
+  { value: "apprentice1", label: "Apprentice 1" },
+  { value: "apprentice2", label: "Apprentice 2" },
+  { value: "apprentice3", label: "Apprentice 3" },
+  { value: "apprentice4", label: "Apprentice 4" },
+  { value: "guru1", label: "Guru 1" },
+  { value: "guru2", label: "Guru 2" },
+  { value: "master", label: "Master" },
+  { value: "enlightened", label: "Enlightened" },
+  { value: "burned", label: "Burned" },
+];
 
 const props = defineProps<{
   level: number | undefined;
@@ -113,6 +127,12 @@ const levelSelectionButtonTextMap = computed<Record<number, string>>(() => {
           </span>
         </div>
       </fieldset>
+      <base-dropdown
+        v-model="filters.srsStages"
+        :options="srsStageOptions"
+        label="SRS stage"
+        placeholder="All stages"
+      />
       <div class="filter-group search">
         <input
           id="subject-search"

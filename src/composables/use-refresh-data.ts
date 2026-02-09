@@ -6,12 +6,7 @@ import {
   getUserReport,
   getVocabularyCollection,
 } from "../api";
-import {
-  KANJI_KEY,
-  RADICAL_KEY,
-  USER_KEY,
-  VOCABULARY_KEY,
-} from "../storage-keys";
+import { USER_KEY } from "../storage-keys";
 import type {
   Kanji,
   Radical,
@@ -25,6 +20,7 @@ import { subjectCollection } from "./use-learning-material";
 import { apiToken, user } from "./use-login";
 import { useNotifications } from "./use-notifications";
 import { useOpfsStorage } from "./use-opfs-storage";
+import { useSrsStages } from "./use-srs-stages";
 
 interface ReturnValue {
   isRefreshing: Ref<boolean>;
@@ -35,18 +31,8 @@ export const useRefreshData = (): ReturnValue => {
   const { addNotification } = useNotifications();
 
   const { setValue: setUser } = useOpfsStorage<User, "report">(USER_KEY);
-  const { setValue: setKanji } = useOpfsStorage<
-    SubjectResponse<Kanji>,
-    "collection"
-  >(KANJI_KEY);
-  const { setValue: setRadical } = useOpfsStorage<
-    SubjectResponse<Radical>,
-    "collection"
-  >(RADICAL_KEY);
-  const { setValue: setVocabulary } = useOpfsStorage<
-    SubjectResponse<Vocabulary>,
-    "collection"
-  >(VOCABULARY_KEY);
+
+  const { fetchAndMergeSrsStages } = useSrsStages();
 
   const isRefreshing = ref<boolean>(false);
 
@@ -87,38 +73,32 @@ export const useRefreshData = (): ReturnValue => {
           ),
         ]);
 
-        const updatedKanjiCollection = sortByIdAndLevel([
+        subjectCollection.kanji.value = sortByIdAndLevel([
           ...subjectCollection.kanji.value,
           ...newKanjiCollection,
         ]);
-        const updatedRadicalCollection = sortByIdAndLevel([
+        subjectCollection.radical.value = sortByIdAndLevel([
           ...subjectCollection.radical.value,
           ...newRadicalCollection,
         ]);
-        const updatedVocabularyCollection = sortByIdAndLevel([
+        subjectCollection.vocabulary.value = sortByIdAndLevel([
           ...subjectCollection.vocabulary.value,
           ...newVocabularyCollection,
         ]);
+      }
 
-        subjectCollection.kanji.value = updatedKanjiCollection;
-        subjectCollection.radical.value = updatedRadicalCollection;
-        subjectCollection.vocabulary.value = updatedVocabularyCollection;
+      await fetchAndMergeSrsStages(newLevel);
 
-        user.value = newUserData;
+      user.value = newUserData;
+      await setUser(newUserData);
 
-        await Promise.all([
-          setUser(newUserData),
-          setKanji(updatedKanjiCollection),
-          setRadical(updatedRadicalCollection),
-          setVocabulary(updatedVocabularyCollection),
-        ]);
-
+      if (newLevel > oldLevel) {
         addNotification(
-          `Leveled up to ${newLevel}! New subjects loaded.`,
+          `Leveled up to ${newLevel}! Subjects and assignments data synced`,
           "success",
         );
       } else {
-        addNotification("Your level hasn't changed.", "info");
+        addNotification("Assignments data synced", "success");
       }
     } catch (error) {
       addNotification(
