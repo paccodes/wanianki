@@ -1,6 +1,6 @@
 import {
+  onBeforeUnmount,
   onMounted,
-  onUnmounted,
   ref,
   type Ref,
   type ShallowRef,
@@ -92,7 +92,7 @@ export const useStudyNavigation = <T extends Subject>(
     window.addEventListener("keydown", onKeyDownEventListener);
   });
 
-  onUnmounted(() => {
+  onBeforeUnmount(() => {
     window.removeEventListener("keydown", onKeyDownEventListener);
   });
 

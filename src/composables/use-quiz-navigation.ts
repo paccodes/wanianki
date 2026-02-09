@@ -1,8 +1,8 @@
 import {
   computed,
   type ComputedRef,
+  onBeforeUnmount,
   onMounted,
-  onUnmounted,
   ref,
   type Ref,
   useTemplateRef,
@@ -202,7 +202,7 @@ export const useQuizNavigation = (): ReturnValue => {
     window.addEventListener("keydown", onKeyDownEventListener);
   });
 
-  onUnmounted(() => {
+  onBeforeUnmount(() => {
     window.removeEventListener("keydown", onKeyDownEventListener);
   });
 
