@@ -285,7 +285,18 @@ onBeforeUnmount(() => {
 }
 
 @media (width <= 768px) {
+  .dropdown-container {
+    width: 100%;
+  }
+
+  .dropdown-wrapper {
+    display: flex;
+    width: 100%;
+  }
+
   .dropdown-trigger {
+    width: 100%;
+    min-width: unset;
     min-height: 44px;
     padding: 10px 12px;
     font-size: 0.85rem;
