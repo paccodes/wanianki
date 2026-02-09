@@ -5,7 +5,7 @@ A lightweight web application that **fetches review subjects from your WaniKani 
 ## Features
 
 - 📴 **Offline reviews** — review cached subjects without an active network connection.
-- 🎯 **Flexible selection** — filter by subject type and level range, search by meaning or reading, or toggle entire levels at once.
+- 🎯 **Flexible selection** — filter by subject type, level range, and SRS stage, search by meaning or reading, or toggle entire levels at once.
 - 💾 **Local persistence** — all data is stored in-browser using the OPFS API.
 - 📚 **Two review modes** — study mode for reading content, quiz mode for testing yourself.
 - 🗂️ **Saved review decks** — save your current selection as a named deck and load it later for quick access.
@@ -20,7 +20,7 @@ A lightweight web application that **fetches review subjects from your WaniKani 
 Provide a valid WaniKani personal access token with `all_data:read` permission.
 
 ![selection-page](./assets/selection-page.png)
-Select subjects using the tabbed filter (radical, kanji, vocabulary), adjust the level range with sliders, or search by meaning or reading with autocomplete suggestions. Browse subjects grouped by level, toggle entire levels at once, or click individual items. Selected subjects appear as removable chips at the bottom. Choose ordered or shuffled review, then start in either study mode or quiz mode.
+Select subjects using the tabbed filter (radical, kanji, vocabulary), adjust the level range with sliders, filter by SRS stage (Locked, Apprentice, Guru, Master, Enlightened, Burned), or search by meaning or reading with autocomplete suggestions. Browse subjects grouped by level, toggle entire levels at once, or click individual items. Selected subjects appear as removable chips at the bottom. Choose ordered or shuffled review, then start in either study mode or quiz mode.
 
 When you level up on WaniKani, use the sync button in the header to fetch your new subjects. You'll be prompted to re-enter your API token, which is used only for that request and then discarded.
 
