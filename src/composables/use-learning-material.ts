@@ -63,7 +63,7 @@ export const useLearningMaterial = (
     "collection"
   >({
     storageKey: KANJI_KEY,
-    errorMessage: "Failed to load kanji",
+    errorMessage: "Failed to load kanjis",
     successMessage: "Kanjis successfully loaded",
     shouldFetchOnMounted: true,
     shouldSaveToOpfs: false,
