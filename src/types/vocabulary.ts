@@ -19,5 +19,4 @@ export interface Vocabulary extends Subject {
   parts_of_speech: string[];
   reading_mnemonic: string;
   readings: Reading[];
-  visually_similar_subject_ids: number[];
 }

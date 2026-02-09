@@ -6,7 +6,6 @@ interface Image {
 }
 
 export interface Radical extends Subject {
-  amalgamation_subject_ids: number[];
   character_images: Image[];
   characters: string | null;
 }

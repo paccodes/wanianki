@@ -4,11 +4,6 @@ import type { Vocabulary } from "./vocabulary";
 
 export type SubjectType = "kanji" | "radical" | "vocabulary";
 
-interface AuxiliaryMeaning {
-  meaning: string;
-  type: "whitelist" | "blacklist";
-}
-
 interface Meaning {
   accepted_answer: boolean;
   meaning: string;
@@ -16,8 +11,6 @@ interface Meaning {
 }
 
 export interface Subject {
-  auxiliary_meanings: AuxiliaryMeaning[];
-  document_url: string;
   level: number;
   meaning_mnemonic: string;
   meanings: Meaning[];
