@@ -12,8 +12,8 @@ import type {
 import {
   fetchAllPages,
   getErrorMessage,
-  mergeSrsStages,
-  sortByIdAndLevel,
+  getSortedByIdAndLevel,
+  getSubjectsWithSrsStages,
 } from "../utils";
 
 import { subjectCollection } from "./use-learning-material";
@@ -53,19 +53,27 @@ export const useSrsStages = (): ReturnValue => {
         getAssignmentCollection(FIRST_LEVEL, userLevel),
       );
 
-      const kanjiCollectionWithSrs = sortByIdAndLevel(
-        mergeSrsStages(subjectCollection.kanji.value, assignments),
-      );
-      const radicalCollectionWithSrs = sortByIdAndLevel(
-        mergeSrsStages(subjectCollection.radical.value, assignments),
-      );
-      const vocabularyCollectionWithSrs = sortByIdAndLevel(
-        mergeSrsStages(subjectCollection.vocabulary.value, assignments),
-      );
+      const { kanji, radical, vocabulary } = subjectCollection;
 
-      subjectCollection.kanji.value = kanjiCollectionWithSrs;
-      subjectCollection.radical.value = radicalCollectionWithSrs;
-      subjectCollection.vocabulary.value = vocabularyCollectionWithSrs;
+      const [
+        kanjiCollectionWithSrs,
+        radicalCollectionWithSrs,
+        vocabularyCollectionWithSrs,
+      ] = [
+        getSortedByIdAndLevel(
+          getSubjectsWithSrsStages(kanji.value, assignments),
+        ),
+        getSortedByIdAndLevel(
+          getSubjectsWithSrsStages(radical.value, assignments),
+        ),
+        getSortedByIdAndLevel(
+          getSubjectsWithSrsStages(vocabulary.value, assignments),
+        ),
+      ];
+
+      kanji.value = kanjiCollectionWithSrs;
+      radical.value = radicalCollectionWithSrs;
+      vocabulary.value = vocabularyCollectionWithSrs;
 
       await Promise.all([
         setKanji(kanjiCollectionWithSrs),

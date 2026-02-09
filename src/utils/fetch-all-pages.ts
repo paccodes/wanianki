@@ -8,7 +8,7 @@ import type {
   Sortable,
 } from "../types";
 
-import { sortByIdAndLevel } from "./sort-by-id-and-level";
+import { getSortedByIdAndLevel } from "./get-sorted-by-id-and-level";
 
 export const fetchAllPages = async <T, U extends ResponseType>(
   fetcher: Fetcher<T>,
@@ -34,7 +34,10 @@ export const fetchAllPages = async <T, U extends ResponseType>(
   } while (pages.next_url);
 
   if (Array.isArray(result)) {
-    return sortByIdAndLevel(result as Sortable[]) as ReportOrCollection<T, U>;
+    return getSortedByIdAndLevel(result as Sortable[]) as ReportOrCollection<
+      T,
+      U
+    >;
   }
 
   return result as ReportOrCollection<T, U>;

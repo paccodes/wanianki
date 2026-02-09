@@ -1,12 +1,12 @@
 import { describe, it, expect } from "vitest";
 
-import { shuffleArray } from "../shuffle-array";
+import { getShuffledArray } from "../get-shuffled-array";
 
-describe("shuffleArray", () => {
+describe("getShuffledArray", () => {
   it("returns a new array (does not mutate the original)", () => {
     const original = [1, 2, 3, 4, 5];
     const originalCopy = [...original];
-    const shuffled = shuffleArray(original);
+    const shuffled = getShuffledArray(original);
 
     expect(original).toEqual(originalCopy);
     expect(shuffled).not.toBe(original);
@@ -14,27 +14,27 @@ describe("shuffleArray", () => {
 
   it("returns an array with the same elements", () => {
     const original = [1, 2, 3, 4, 5];
-    const shuffled = shuffleArray(original);
+    const shuffled = getShuffledArray(original);
 
     expect(shuffled).toHaveLength(original.length);
     expect(shuffled.sort()).toEqual(original.sort());
   });
 
   it("handles empty arrays", () => {
-    const result = shuffleArray([]);
+    const result = getShuffledArray([]);
 
     expect(result).toEqual([]);
   });
 
   it("handles single-element arrays", () => {
-    const result = shuffleArray([1]);
+    const result = getShuffledArray([1]);
 
     expect(result).toEqual([1]);
   });
 
   it("handles arrays with duplicate values", () => {
     const original = [1, 1, 2, 2, 3];
-    const shuffled = shuffleArray(original);
+    const shuffled = getShuffledArray(original);
 
     expect(shuffled).toHaveLength(original.length);
     expect(shuffled.sort()).toEqual(original.sort());
@@ -42,12 +42,12 @@ describe("shuffleArray", () => {
 
   it("works with different types", () => {
     const strings = ["a", "b", "c"];
-    const shuffledStrings = shuffleArray(strings);
+    const shuffledStrings = getShuffledArray(strings);
 
     expect(shuffledStrings.sort()).toEqual(strings.sort());
 
     const objects = [{ id: 1 }, { id: 2 }, { id: 3 }];
-    const shuffledObjects = shuffleArray(objects);
+    const shuffledObjects = getShuffledArray(objects);
 
     expect(shuffledObjects).toHaveLength(objects.length);
 
@@ -61,7 +61,7 @@ describe("shuffleArray", () => {
     const results = new Set<string>();
 
     for (let i = 0; i < 20; i++) {
-      results.add(shuffleArray(original).join(","));
+      results.add(getShuffledArray(original).join(","));
     }
 
     expect(results.size).toBeGreaterThan(1);

@@ -1,15 +1,15 @@
 import { describe, it, expect } from "vitest";
 
-import { sortByIdAndLevel } from "../sort-by-id-and-level";
+import { getSortedByIdAndLevel } from "../get-sorted-by-id-and-level";
 
-describe("sortByIdAndLevel", () => {
+describe("getSortedByIdAndLevel", () => {
   it("returns a new array (does not mutate the original)", () => {
     const original = [
       { id: 2, data: { level: 1 } },
       { id: 1, data: { level: 1 } },
     ];
     const originalCopy = JSON.stringify(original);
-    const sorted = sortByIdAndLevel(original);
+    const sorted = getSortedByIdAndLevel(original);
 
     expect(JSON.stringify(original)).toBe(originalCopy);
     expect(sorted).not.toBe(original);
@@ -22,7 +22,7 @@ describe("sortByIdAndLevel", () => {
       { id: 2, data: { level: 2 } },
       { id: 4, data: { level: 1 } },
     ];
-    const sorted = sortByIdAndLevel(items);
+    const sorted = getSortedByIdAndLevel(items);
 
     expect(sorted).toEqual([
       { id: 1, data: { level: 1 } },
@@ -33,13 +33,13 @@ describe("sortByIdAndLevel", () => {
   });
 
   it("handles empty arrays", () => {
-    expect(sortByIdAndLevel([])).toEqual([]);
+    expect(getSortedByIdAndLevel([])).toEqual([]);
   });
 
   it("handles single-element arrays", () => {
     const item = { id: 1, data: { level: 1 } };
 
-    expect(sortByIdAndLevel([item])).toEqual([item]);
+    expect(getSortedByIdAndLevel([item])).toEqual([item]);
   });
 
   it("handles already sorted arrays", () => {
@@ -49,7 +49,7 @@ describe("sortByIdAndLevel", () => {
       { id: 3, data: { level: 2 } },
     ];
 
-    expect(sortByIdAndLevel(items)).toEqual(items);
+    expect(getSortedByIdAndLevel(items)).toEqual(items);
   });
 
   it("handles items with same level sorted by id", () => {
@@ -58,7 +58,7 @@ describe("sortByIdAndLevel", () => {
       { id: 3, data: { level: 1 } },
       { id: 1, data: { level: 1 } },
     ];
-    const sorted = sortByIdAndLevel(items);
+    const sorted = getSortedByIdAndLevel(items);
 
     expect(sorted).toEqual([
       { id: 1, data: { level: 1 } },
@@ -73,7 +73,7 @@ describe("sortByIdAndLevel", () => {
       { id: 1, data: { level: 1 } },
       { id: 1, data: { level: 2 } },
     ];
-    const sorted = sortByIdAndLevel(items);
+    const sorted = getSortedByIdAndLevel(items);
 
     expect(sorted).toEqual([
       { id: 1, data: { level: 1 } },
@@ -87,7 +87,7 @@ describe("sortByIdAndLevel", () => {
       { id: 2, data: { level: 1, name: "B" } },
       { id: 1, data: { level: 1, name: "A" } },
     ];
-    const sorted = sortByIdAndLevel(items);
+    const sorted = getSortedByIdAndLevel(items);
 
     expect(sorted).toHaveLength(2);
     expect(sorted[0]!.data.name).toBe("A");

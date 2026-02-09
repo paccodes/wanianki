@@ -1,7 +1,10 @@
 import { ref, type ComputedRef, type Ref } from "vue";
 
 import type { ReviewSubject } from "../types";
-import { getNavigationPathsFromSelectedSubjects, shuffleArray } from "../utils";
+import {
+  getNavigationPathsFromSelectedSubjects,
+  getShuffledArray,
+} from "../utils";
 
 export const reviewNavigationPaths = ref<string[]>([]);
 
@@ -22,7 +25,7 @@ const createReviewNavigationPaths = ({
   });
 
   reviewNavigationPaths.value = shouldShuffle.value
-    ? shuffleArray(paths)
+    ? getShuffledArray(paths)
     : paths;
 
   reviewNavigationIndex.value = -1;

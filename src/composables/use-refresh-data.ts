@@ -14,7 +14,11 @@ import type {
   User,
   Vocabulary,
 } from "../types";
-import { fetchAllPages, getErrorMessage, sortByIdAndLevel } from "../utils";
+import {
+  fetchAllPages,
+  getErrorMessage,
+  getSortedByIdAndLevel,
+} from "../utils";
 
 import { subjectCollection } from "./use-learning-material";
 import { apiToken, user } from "./use-login";
@@ -73,15 +77,15 @@ export const useRefreshData = (): ReturnValue => {
           ),
         ]);
 
-        subjectCollection.kanji.value = sortByIdAndLevel([
+        subjectCollection.kanji.value = getSortedByIdAndLevel([
           ...subjectCollection.kanji.value,
           ...newKanjiCollection,
         ]);
-        subjectCollection.radical.value = sortByIdAndLevel([
+        subjectCollection.radical.value = getSortedByIdAndLevel([
           ...subjectCollection.radical.value,
           ...newRadicalCollection,
         ]);
-        subjectCollection.vocabulary.value = sortByIdAndLevel([
+        subjectCollection.vocabulary.value = getSortedByIdAndLevel([
           ...subjectCollection.vocabulary.value,
           ...newVocabularyCollection,
         ]);

@@ -4,7 +4,7 @@ import type {
   SubjectResponseWithSrsStage,
 } from "../types";
 
-export const mergeSrsStages = <T>(
+export const getSubjectsWithSrsStages = <T>(
   subjects: SubjectResponse<T>[],
   assignments: AssignmentResponse[],
 ): SubjectResponseWithSrsStage<T>[] => {
