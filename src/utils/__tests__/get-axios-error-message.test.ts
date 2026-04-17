@@ -1,5 +1,5 @@
 import { AxiosError, AxiosHeaders } from "axios";
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 
 import { getErrorMessage } from "../get-error-message";
 

@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { computed, ref } from "vue";
 
 import type { ReviewSubject } from "../../types";
