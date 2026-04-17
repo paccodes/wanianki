@@ -31,6 +31,7 @@ export default defineConfigWithVueTs([
   {
     rules: {
       ...eslintConfigPrettier.rules,
+      "@typescript-eslint/consistent-type-imports": "error",
     },
   },
   {

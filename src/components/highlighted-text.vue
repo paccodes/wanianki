@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getParsedText } from "../utils";
+import type { getParsedText } from "../utils";
 
 defineProps<{
   parsedText: ReturnType<typeof getParsedText>;
