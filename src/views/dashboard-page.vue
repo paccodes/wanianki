@@ -107,7 +107,7 @@ const handleRefreshSubmit = (apiKey: string) => {
           </button>
           <a
             class="github-link"
-            href="https://github.com/metapho-re/wanianki"
+            href="https://github.com/paccodes/wanianki"
             target="_blank"
             rel="noopener noreferrer"
             title="View source"
