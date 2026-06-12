@@ -76,10 +76,6 @@ npm run type-check    # Run the types check
 
 [Vue 3](https://github.com/vuejs/core/), [Vite](https://github.com/vitejs/vite/) and [TypeScript](https://github.com/microsoft/TypeScript/)
 
-## Author
-
-- **Pierre-Alain Castella** - _Initial work_ - [metapho-re](https://github.com/metapho-re)
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
