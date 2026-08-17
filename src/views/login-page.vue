@@ -5,13 +5,15 @@ import { loginIconPath } from "../icon-paths";
 import { getTagline } from "../utils";
 
 const { inputValue, isLoading, onSubmit } = useLogin();
+
+const tagline = getTagline();
 </script>
 
 <template>
   <div className="login-page">
     <div className="header-container">
       <h1 className="title">WaniAnki</h1>
-      <h2 className="tagline">{{ getTagline() }}</h2>
+      <h2 className="tagline">{{ tagline }}</h2>
     </div>
     <div className="form-container">
       <div className="form">
