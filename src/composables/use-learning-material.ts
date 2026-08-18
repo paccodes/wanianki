@@ -54,6 +54,8 @@ export const useLearningMaterial = (
       if (completedCount === SUBJECT_TYPE_COUNT && apiToken.value) {
         fetchAndMergeSrsStages(userLevel).then(() => {
           addNotification("Assignments successfully loaded", "success");
+
+          apiToken.value = null;
         });
       }
     };
