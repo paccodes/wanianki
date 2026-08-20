@@ -66,8 +66,8 @@ const checked = defineModel<boolean>();
 
 .slider::before {
   position: absolute;
-  top: 2px;
-  left: 2px;
+  top: 1px;
+  left: 1px;
   width: 16px;
   height: 16px;
   border-radius: var(--radius-full);
