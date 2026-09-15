@@ -1,6 +1,6 @@
 # WaniAnki
 
-A lightweight web application that **fetches review subjects from your WaniKani account and lets you review them offline**. All review data is persisted locally using the browser **Origin Private File System (OPFS) API**, and **your API token is not retained in browser memory**. Select subjects by type (radical, kanji, vocabulary), filter by level range, or search by meaning or reading.
+A lightweight web application that **fetches review subjects from your WaniKani account and lets you review them offline**. All review data is persisted locally using the browser **Origin Private File System (OPFS) API**, and **your API token is never persisted** — it is held in memory only for the duration of a request, then discarded. Select subjects by type (radical, kanji, vocabulary), filter by level range, or search by meaning or reading.
 
 ## Features
 
@@ -9,10 +9,11 @@ A lightweight web application that **fetches review subjects from your WaniKani 
 - 💾 **Local persistence** — all data is stored in-browser using the OPFS API.
 - 📚 **Two review modes** — study mode for reading content, quiz mode for testing yourself.
 - 🗂️ **Saved review decks** — save your current selection as a named deck and load it later for quick access.
-- 🔄 **Sync with WaniKani** — sync your data when you level up to fetch new subjects while keeping your API token secure.
+- 🐛 **Leech drilling** — pool the items you keep missing from your review statistics, your own pins, look-alike kanji and bundled community lists, then drill them as a deck.
+- 🔄 **Sync with WaniKani** — sync your data when you level up to fetch new subjects, re-entering your API token just for that request.
 - 📊 **Quiz summary** — view your quiz results and create a new deck from incorrect answers to focus your practice.
 - ⌨️ **Easy keyboard navigation** — use keyboard shortcuts to easily navigate through review subjects.
-- 🔒 **API token safety** — the API token is not kept in memory.
+- 🔒 **API token safety** — the API token is never written to storage. It is held in memory only while a request is in flight, then discarded.
 
 ## Usage
 
@@ -41,6 +42,44 @@ An interactive mode that tests your knowledge. You'll be prompted to type in eit
 ### Quiz Summary
 
 After completing a quiz, you'll see a summary of your results with accuracy statistics broken down by subject type and quiz type. If you got any answers wrong, you can create a new deck from those items to focus your practice. When quizzing from an existing deck, you can also update that deck to contain only the items you missed.
+
+## Leeches
+
+Leeches are the items you keep getting wrong. WaniKani publishes the raw review statistics but never tells you which items have become chronic failures, so WaniAnki works that out itself. Open the leech dialog from the dashboard header to pool them from four sources, then drill the result as a one-off deck.
+
+Every source is a toggle showing how many items it contributes. An item found by more than one source is listed once and labelled with all of them, and statistical leeches carry their score.
+
+### Statistical
+
+Chronic failures computed from your WaniKani review statistics.
+
+They are scored with the formula used by the WaniKani leech-table userscripts, computed separately for meaning and reading. The exponent and the cutoff below are WaniAnki's defaults, not settings:
+
+```
+score = incorrect / max(current_streak, 1) ** 1.5
+```
+
+This source needs your review statistics, which the **Sync** button fetches. As with every other request, your API token is used once and then discarded, and the result is cached in OPFS alongside the rest of your data.
+
+### Manual
+
+Items you pinned yourself with the flag toggle, on any subject card in the dashboard selection list, in the leech list, or in the quiz summary.
+
+### Confusion
+
+Kanji you keep missing, paired with the look-alikes WaniKani lists for them, limited to the ones you have already unlocked.
+
+Confusion groups are always drilled whole — 土 never turns up without 士. Look-alikes you have not unlocked yet are dropped from the group, so a kanji whose look-alikes are all still locked contributes nothing.
+
+### Curated
+
+Look-alike kanji groups bundled with WaniAnki, drawn from the pairs the community reports confusing most often.
+
+Curated lists are selected individually and come with a scope switch: **Struggling only** keeps the groups holding an item you already miss, while **Everything** keeps every group of the selected lists. Their groups are drilled whole on the same terms as confusion groups.
+
+### Drilling the pool
+
+**Drill leeches** loads the pooled items as your current selection, replacing whatever was selected, so the usual study and quiz modes take over from there.
 
 ## Keyboard Shortcuts
 

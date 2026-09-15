@@ -5,11 +5,16 @@ import type {
   Kanji,
   Radical,
   Response,
+  ReviewStatisticResponse,
   SubjectResponse,
   User,
   Vocabulary,
 } from "../types";
-import { getAssignmentsUrl, getSubjectsUrl } from "../utils";
+import {
+  getAssignmentsUrl,
+  getReviewStatisticsUrl,
+  getSubjectsUrl,
+} from "../utils";
 
 import { axiosClient } from "./axios-client";
 
@@ -53,6 +58,14 @@ export function getAssignmentCollection(startLevel: number, endLevel: number) {
   return function (url: string | null) {
     return getResource<AssignmentResponse>(
       url ?? getAssignmentsUrl(startLevel, endLevel),
+    );
+  };
+}
+
+export function getReviewStatisticCollection() {
+  return function (url: string | null) {
+    return getResource<ReviewStatisticResponse>(
+      url ?? getReviewStatisticsUrl(),
     );
   };
 }

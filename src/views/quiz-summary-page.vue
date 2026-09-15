@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { BaseButton, QuizSummary, RadicalView } from "../components";
+import {
+  BaseButton,
+  LeechFlagButton,
+  QuizSummary,
+  RadicalView,
+} from "../components";
 import { useQuizSummary } from "../composables";
 import type { Radical, ReviewSubject } from "../types";
 import { getRadicalImageUrl } from "../utils";
@@ -43,6 +48,7 @@ const getRadicalUrl = (item: ReviewSubject) => {
       <h2 class="section-title">
         Incorrect Answers ({{ incorrectItems.length }})
       </h2>
+      <p class="section-hint">Flag the ones you keep missing as leeches.</p>
       <ul class="incorrect-list" role="list">
         <li
           v-for="item in incorrectItems"
@@ -58,6 +64,10 @@ const getRadicalUrl = (item: ReviewSubject) => {
           />
           <span v-else class="item-characters">{{ getCharacters(item) }}</span>
           <span class="item-type">{{ item.object }}</span>
+          <leech-flag-button
+            :subject-id="item.id"
+            :label="getCharacters(item) || 'radical'"
+          />
         </li>
       </ul>
     </section>
@@ -196,6 +206,13 @@ const getRadicalUrl = (item: ReviewSubject) => {
   color: var(--dimmed-color);
   font-size: 0.75rem;
   text-transform: capitalize;
+}
+
+.section-hint {
+  margin: -8px 0 12px;
+  color: var(--dimmed-color);
+  font-size: 0.8rem;
+  text-align: center;
 }
 
 .deck-section {

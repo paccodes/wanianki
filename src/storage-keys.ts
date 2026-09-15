@@ -4,3 +4,6 @@ export const RADICAL_KEY = "RADICAL";
 export const VOCABULARY_KEY = "VOCABULARY";
 export const THEME_KEY = "THEME";
 export const DECKS_KEY = "DECKS";
+export const REVIEW_STATISTICS_KEY = "REVIEW_STATISTICS";
+export const MANUAL_LEECHES_KEY = "MANUAL_LEECHES";
+export const LEECH_FILTERS_KEY = "LEECH_FILTERS";

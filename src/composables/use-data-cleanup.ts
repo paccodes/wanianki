@@ -3,10 +3,17 @@ import { ref, type Ref } from "vue";
 import {
   KANJI_KEY,
   RADICAL_KEY,
+  REVIEW_STATISTICS_KEY,
   USER_KEY,
   VOCABULARY_KEY,
 } from "../storage-keys";
-import type { Kanji, Radical, User, Vocabulary } from "../types";
+import type {
+  Kanji,
+  Radical,
+  ReviewStatisticResponse,
+  User,
+  Vocabulary,
+} from "../types";
 
 import { user } from "./use-login";
 import { useNotifications } from "./use-notifications";
@@ -33,11 +40,15 @@ export const useDataCleanup = (): ReturnValue => {
     { setValue: setKanji },
     { setValue: setRadical },
     { setValue: setVocabulary },
+    { setValue: setReviewStatistics },
   ] = [
     useOpfsStorage<User, "report">(USER_KEY),
     useOpfsStorage<Kanji, "collection">(KANJI_KEY),
     useOpfsStorage<Radical, "collection">(RADICAL_KEY),
     useOpfsStorage<Vocabulary, "collection">(VOCABULARY_KEY),
+    useOpfsStorage<ReviewStatisticResponse, "collection">(
+      REVIEW_STATISTICS_KEY,
+    ),
   ];
 
   const cleanUpData = async ({
@@ -55,6 +66,7 @@ export const useDataCleanup = (): ReturnValue => {
         setKanji(null),
         setRadical(null),
         setVocabulary(null),
+        setReviewStatistics(null),
       ]);
 
       user.value = null;

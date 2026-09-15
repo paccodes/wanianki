@@ -41,8 +41,10 @@ defineExpose<{
 
 <style scoped>
 .dialog {
+  overflow: hidden;
   width: v-bind("props.width");
   max-width: calc(100vw - 48px);
+  max-height: calc(100dvh - 48px);
   padding: 0;
   border: none;
   border-radius: var(--radius-lg);
@@ -55,7 +57,13 @@ defineExpose<{
 }
 
 .dialog-content {
-  padding: 32px 40px;
+  --dialog-inline-padding: 40px;
+
+  display: flex;
+  overflow: hidden;
+  max-height: inherit;
+  flex-direction: column;
+  padding: 32px var(--dialog-inline-padding);
   border: 1px solid var(--background-color-3);
   border-radius: var(--radius-lg);
   background: linear-gradient(
@@ -71,7 +79,7 @@ defineExpose<{
 
 .dialog-header {
   display: flex;
-  justify-content: space-between;
+  flex-shrink: 0;
   padding-bottom: 16px;
   border-bottom: 1px solid var(--background-color-3);
   font-size: 1.3rem;
@@ -79,11 +87,15 @@ defineExpose<{
 }
 
 .dialog-body {
-  padding-block: 24px;
+  min-height: 0;
+  padding: 24px var(--dialog-inline-padding);
+  margin-inline: calc(-1 * var(--dialog-inline-padding));
+  overflow-y: auto;
 }
 
 .dialog-footer {
   display: flex;
+  flex-shrink: 0;
   justify-content: flex-end;
   padding-top: 16px;
   border-top: 1px solid var(--background-color-3);
@@ -97,6 +109,8 @@ defineExpose<{
   }
 
   .dialog-content {
+    --dialog-inline-padding: 24px;
+
     padding: 24px;
   }
 
@@ -106,7 +120,7 @@ defineExpose<{
   }
 
   .dialog-body {
-    padding-block: 16px;
+    padding: 16px var(--dialog-inline-padding);
   }
 
   .dialog-footer {
@@ -120,6 +134,8 @@ defineExpose<{
   }
 
   .dialog-content {
+    --dialog-inline-padding: 16px;
+
     padding: 16px;
   }
 
@@ -129,7 +145,7 @@ defineExpose<{
   }
 
   .dialog-body {
-    padding-block: 12px;
+    padding: 12px var(--dialog-inline-padding);
   }
 
   .dialog-footer {

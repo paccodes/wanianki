@@ -28,4 +28,9 @@ describe("getPluralizedQuantity", () => {
     expect(getPluralizedQuantity("item", 1.5)).toBe("1.5 items");
     expect(getPluralizedQuantity("item", 0.5)).toBe("0.5 items");
   });
+
+  it("appends es to words ending in ch", () => {
+    expect(getPluralizedQuantity("leech", 1)).toBe("1 leech");
+    expect(getPluralizedQuantity("leech", 2)).toBe("2 leeches");
+  });
 });

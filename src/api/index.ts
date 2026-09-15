@@ -3,6 +3,7 @@ export {
   getAssignmentCollection,
   getKanjiCollection,
   getRadicalCollection,
+  getReviewStatisticCollection,
   getUserReport,
   getVocabularyCollection,
 } from "./service";

@@ -9,17 +9,20 @@ import {
   BaseSpinner,
   BaseSwitch,
   DeckDialog,
+  LeechDialog,
   SubjectSelector,
 } from "../components";
 import {
   useDashboard,
   useDecks,
+  useLeeches,
   user,
   useRefreshData,
   useTheme,
 } from "../composables";
 import {
   bookIconPath,
+  bugIconPath,
   cardsStackIconPath,
   darkModeIconPath,
   lightIconPath,
@@ -28,9 +31,11 @@ import {
 
 const { theme, toggleTheme } = useTheme();
 
-const { isRefreshing, refresh } = useRefreshData();
+const { isRefreshing } = useRefreshData();
 
 const { decks, saveDeck, removeDeck } = useDecks();
+
+const { leeches, isLoading: isSyncingLeeches } = useLeeches();
 
 const {
   level,
@@ -41,6 +46,7 @@ const {
   isLoading,
   canReview,
   handleLoadDeck,
+  handleLoadLeeches,
   handleSaveDeck,
   handleAddSubjectId,
   handleDeleteSubjectId,
@@ -49,18 +55,15 @@ const {
 } = useDashboard(saveDeck);
 
 const deckDialogRef = ref<InstanceType<typeof DeckDialog> | null>(null);
+const leechDialogRef = ref<InstanceType<typeof LeechDialog> | null>(null);
 const apiKeyDialogRef = ref<InstanceType<typeof ApiKeyDialog> | null>(null);
 
 const openDeckDialog = () => {
   deckDialogRef.value?.dialogRef?.showModal();
 };
 
-const openApiKeyDialog = () => {
-  apiKeyDialogRef.value?.dialogRef?.showModal();
-};
-
-const handleRefreshSubmit = (apiKey: string) => {
-  refresh(apiKey);
+const openLeechDialog = () => {
+  leechDialogRef.value?.dialogRef?.showModal();
 };
 </script>
 
@@ -97,11 +100,22 @@ const handleRefreshSubmit = (apiKey: string) => {
             <base-icon :path="cardsStackIconPath" width="24px" height="24px" />
           </button>
           <button
+            class="leeches-toggle"
+            :title="`Drill leeches (${leeches.length})`"
+            :disabled="isSyncingLeeches"
+            @click="openLeechDialog"
+          >
+            <base-icon :path="bugIconPath" width="24px" height="24px" />
+            <span v-if="leeches.length > 0" class="leech-count">
+              {{ leeches.length }}
+            </span>
+          </button>
+          <button
             class="refresh-button"
             :class="{ refreshing: isRefreshing }"
             title="Check for level changes"
             :disabled="isRefreshing"
-            @click="openApiKeyDialog"
+            @click="apiKeyDialogRef?.open('refresh')"
           >
             <base-icon :path="syncIconPath" width="24px" height="24px" />
           </button>
@@ -161,7 +175,12 @@ const handleRefreshSubmit = (apiKey: string) => {
     @load="handleLoadDeck"
     @remove="removeDeck"
   />
-  <api-key-dialog ref="apiKeyDialogRef" @submit="handleRefreshSubmit" />
+  <leech-dialog
+    ref="leechDialogRef"
+    @drill="handleLoadLeeches"
+    @sync="apiKeyDialogRef?.open('leeches')"
+  />
+  <api-key-dialog ref="apiKeyDialogRef" />
 </template>
 
 <style scoped>
@@ -212,10 +231,14 @@ const handleRefreshSubmit = (apiKey: string) => {
   margin-inline: 8px;
 }
 
-.refresh-button {
+.refresh-button,
+.theme-toggle,
+.decks-toggle,
+.leeches-toggle {
   display: inline-flex;
+  align-items: center;
   border: none;
-  margin-right: 16px;
+  margin-right: 12px;
   background: transparent;
   color: var(--foreground-color-1);
   cursor: pointer;
@@ -223,12 +246,26 @@ const handleRefreshSubmit = (apiKey: string) => {
   vertical-align: middle;
 }
 
-.refresh-button:disabled {
+.refresh-button {
+  margin-right: 16px;
+}
+
+.leeches-toggle {
+  position: relative;
+}
+
+.refresh-button:disabled,
+.theme-toggle:disabled,
+.decks-toggle:disabled,
+.leeches-toggle:disabled {
   cursor: not-allowed;
   opacity: 0.6;
 }
 
-.refresh-button:hover:not(:disabled) {
+.refresh-button:hover:not(:disabled),
+.theme-toggle:hover:not(:disabled),
+.decks-toggle:hover:not(:disabled),
+.leeches-toggle:hover:not(:disabled) {
   color: var(--primary-color);
 }
 
@@ -246,34 +283,14 @@ const handleRefreshSubmit = (apiKey: string) => {
   }
 }
 
-.theme-toggle {
-  display: inline-flex;
-  border: none;
-  margin-right: 12px;
-  background: transparent;
-  color: var(--foreground-color-1);
-  cursor: pointer;
-  transition: var(--transition-base);
-  vertical-align: middle;
-}
-
-.theme-toggle:hover {
+.leech-count {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
   color: var(--primary-color);
-}
-
-.decks-toggle {
-  display: inline-flex;
-  border: none;
-  margin-right: 12px;
-  background: transparent;
-  color: var(--foreground-color-1);
-  cursor: pointer;
-  transition: var(--transition-base);
-  vertical-align: middle;
-}
-
-.decks-toggle:hover {
-  color: var(--primary-color);
+  font-size: 0.6rem;
+  font-weight: 700;
+  line-height: 1;
 }
 
 .github-link {
@@ -306,21 +323,6 @@ const handleRefreshSubmit = (apiKey: string) => {
   justify-content: space-evenly;
   grid-area: control;
   padding-block: 12px;
-}
-
-.kanji {
-  border: 1px solid var(--kanji-color);
-  background-color: var(--kanji-color-transparent);
-}
-
-.radical {
-  border: 1px solid var(--radical-color);
-  background-color: var(--radical-color-transparent);
-}
-
-.vocabulary {
-  border: 1px solid var(--vocabulary-color);
-  background-color: var(--vocabulary-color-transparent);
 }
 
 @media (width <= 992px) {
@@ -402,6 +404,10 @@ const handleRefreshSubmit = (apiKey: string) => {
   }
 
   .decks-toggle {
+    margin-right: 6px;
+  }
+
+  .leeches-toggle {
     margin-right: 10px;
   }
 

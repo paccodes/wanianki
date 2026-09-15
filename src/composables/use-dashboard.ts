@@ -15,7 +15,8 @@ interface ReturnValue {
   isQuizMode: Ref<boolean>;
   isLoading: ComputedRef<boolean>;
   canReview: ComputedRef<boolean>;
-  handleLoadDeck: (deckId: string, subjectIds: number[]) => void;
+  handleLoadDeck: (deckId: string | null, subjectIds: number[]) => void;
+  handleLoadLeeches: (subjectIds: number[]) => void;
   handleSaveDeck: (name: string) => void;
   handleAddSubjectId: (id: number) => void;
   handleDeleteSubjectId: (id: number) => void;
@@ -59,12 +60,16 @@ export const useDashboard = (
 
   const canReview = computed<boolean>(() => selectedSubjects.value.length > 0);
 
-  const handleLoadDeck = (deckId: string, subjectIds: number[]) => {
+  const handleLoadDeck = (deckId: string | null, subjectIds: number[]) => {
     clearSubjectIds();
 
     subjectIds.forEach((id) => addSubjectId(id));
 
     loadedDeckId.value = deckId;
+  };
+
+  const handleLoadLeeches = (subjectIds: number[]) => {
+    handleLoadDeck(null, subjectIds);
   };
 
   const handleSaveDeck = (name: string) => {
@@ -105,6 +110,7 @@ export const useDashboard = (
     isLoading,
     canReview,
     handleLoadDeck,
+    handleLoadLeeches,
     handleSaveDeck,
     handleAddSubjectId,
     handleDeleteSubjectId,

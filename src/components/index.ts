@@ -8,6 +8,8 @@ import BaseSpinner from "./base-spinner.vue";
 import BaseSwitch from "./base-switch.vue";
 import DeckDialog from "./deck-dialog.vue";
 import HighlightedText from "./highlighted-text.vue";
+import LeechDialog from "./leech-dialog.vue";
+import LeechFlagButton from "./leech-flag-button.vue";
 import NotificationContainer from "./notification-container.vue";
 import QuizSummary from "./quiz-summary.vue";
 import RadicalView from "./radical-view.vue";
@@ -29,6 +31,8 @@ export {
   BaseSwitch,
   DeckDialog,
   HighlightedText,
+  LeechDialog,
+  LeechFlagButton,
   NotificationContainer,
   QuizSummary,
   RadicalView,

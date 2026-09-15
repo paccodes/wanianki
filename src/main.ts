@@ -9,6 +9,7 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import "./style.css";
 import App from "./App.vue";
+import { isCacheExpired } from "./cache";
 import {
   useDataCleanup,
   useNotifications,
@@ -19,8 +20,6 @@ import { routes } from "./routes";
 import { USER_KEY } from "./storage-keys";
 import type { User } from "./types";
 
-const DEFAULT_CACHE_TTL_MS = 14 * 24 * 60 * 60 * 1000;
-
 const { addNotification } = useNotifications();
 const { cleanUpData } = useDataCleanup();
 const { getValue } = useOpfsStorage<User, "report">(USER_KEY);
@@ -28,7 +27,7 @@ const { getValue } = useOpfsStorage<User, "report">(USER_KEY);
 const cachedUserData = await getValue();
 
 if (cachedUserData) {
-  if (Date.now() - cachedUserData.cachedAt <= DEFAULT_CACHE_TTL_MS) {
+  if (!isCacheExpired(cachedUserData)) {
     user.value = cachedUserData.data;
   } else {
     await cleanUpData({

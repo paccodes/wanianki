@@ -3,10 +3,7 @@ import { useRouter } from "vue-router";
 
 import type { ReviewSubject } from "../types";
 
-import {
-  subjectCollection,
-  useLearningMaterial,
-} from "./use-learning-material";
+import { subjectsById, useLearningMaterial } from "./use-learning-material";
 import { useReviewNavigationPaths } from "./use-review-navigation-paths";
 
 interface ReturnValue {
@@ -24,26 +21,12 @@ interface ReturnValue {
 export const useReviewSelection = (userLevel: number): ReturnValue => {
   const router = useRouter();
 
-  const subjectsById = computed<Record<string, ReviewSubject>>(() => {
-    const subjectsMap: Record<string, ReviewSubject> = {};
-
-    for (const subject of [
-      ...subjectCollection.radical.value,
-      ...subjectCollection.kanji.value,
-      ...subjectCollection.vocabulary.value,
-    ]) {
-      subjectsMap[subject.id] = subject;
-    }
-
-    return subjectsMap;
-  });
-
   const selectedSubjectIds = ref<Set<number>>(new Set());
 
   const selectedSubjects = computed<ReviewSubject[]>(() =>
     [...selectedSubjectIds.value]
-      .map((id) => subjectsById.value[id] as ReviewSubject)
-      .filter(Boolean),
+      .map((id) => subjectsById.value.get(id))
+      .filter((subject): subject is ReviewSubject => subject !== undefined),
   );
 
   const shouldShuffle = ref<boolean>(false);

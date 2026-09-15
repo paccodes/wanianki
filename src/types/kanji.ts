@@ -14,4 +14,5 @@ export interface Kanji extends Subject {
   reading_hint: string | null;
   reading_mnemonic: string;
   readings: Reading[];
+  visually_similar_subject_ids: number[];
 }

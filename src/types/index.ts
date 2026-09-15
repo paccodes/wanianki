@@ -7,9 +7,22 @@ export type { CachedData } from "./cache";
 export type { Deck } from "./deck";
 export type { Error } from "./error";
 export type { Kanji, Reading as KanjiReading } from "./kanji";
+export type {
+  CuratedLeechGroup,
+  CuratedLeechList,
+  CuratedLeechScope,
+  Leech,
+  LeechFilters,
+  LeechItem,
+  LeechSource,
+} from "./leech";
 export type { Notification, NotificationType } from "./notification";
 export type { QuizReport, QuizType } from "./quiz";
 export type { Radical } from "./radical";
+export type {
+  ReviewStatistic,
+  ReviewStatisticResponse,
+} from "./review-statistic";
 export type {
   CollectionResponse,
   Pagination,

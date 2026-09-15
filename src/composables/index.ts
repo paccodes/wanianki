@@ -1,6 +1,7 @@
 export { useDashboard } from "./use-dashboard";
 export { useDataCleanup } from "./use-data-cleanup";
 export { useDecks } from "./use-decks";
+export { LEECH_SOURCES, useLeeches } from "./use-leeches";
 export { useLocalStorage } from "./use-local-storage";
 export { subjectCollection } from "./use-learning-material";
 export { apiToken, useLogin, user } from "./use-login";

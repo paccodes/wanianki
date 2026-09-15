@@ -1,15 +1,39 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
+import { useLeeches, useRefreshData } from "../composables";
+
 import BaseButton from "./base-button.vue";
 import BaseDialog from "./base-dialog.vue";
 
-const emit = defineEmits<{
-  submit: [apiKey: string];
-}>();
+interface ApiKeyPrompt {
+  description: string;
+  submitLabel: string;
+  onSubmit: (apiKey: string) => void;
+}
+
+const { refresh } = useRefreshData();
+const { fetchReviewStatistics } = useLeeches();
+
+const PROMPTS = {
+  refresh: {
+    description: "Enter your WaniKani API key to check for level changes.",
+    submitLabel: "Check for Updates",
+    onSubmit: refresh,
+  },
+  leeches: {
+    description:
+      "Enter your WaniKani API key to sync your review statistics and refresh your leeches.",
+    submitLabel: "Sync Leeches",
+    onSubmit: fetchReviewStatistics,
+  },
+} satisfies Record<string, ApiKeyPrompt>;
+
+type ApiKeyPurpose = keyof typeof PROMPTS;
 
 const baseDialogRef = ref<InstanceType<typeof BaseDialog> | null>(null);
 const apiKeyInput = ref<string>("");
+const apiKeyPrompt = ref<ApiKeyPrompt>(PROMPTS.refresh);
 
 const handleCancel = () => {
   apiKeyInput.value = "";
@@ -20,24 +44,25 @@ const handleSubmit = () => {
   const trimmedKey = apiKeyInput.value.trim();
 
   if (trimmedKey) {
-    emit("submit", trimmedKey);
+    apiKeyPrompt.value.onSubmit(trimmedKey);
 
     handleCancel();
   }
 };
 
-defineExpose({
-  get dialogRef() {
-    return baseDialogRef.value?.dialogRef;
-  },
-});
+const open = (purpose: ApiKeyPurpose) => {
+  apiKeyInput.value = "";
+  apiKeyPrompt.value = PROMPTS[purpose];
+
+  baseDialogRef.value?.dialogRef?.showModal();
+};
+
+defineExpose({ open });
 </script>
 
 <template>
   <base-dialog ref="baseDialogRef" title="Enter your API Key">
-    <p class="dialog-description">
-      Enter your WaniKani API key to check for level changes.
-    </p>
+    <p class="dialog-description">{{ apiKeyPrompt.description }}</p>
     <input
       v-model="apiKeyInput"
       type="password"
@@ -51,7 +76,7 @@ defineExpose({
         Cancel
       </base-button>
       <base-button :disabled="!apiKeyInput.trim()" @click="handleSubmit">
-        Check for Updates
+        {{ apiKeyPrompt.submitLabel }}
       </base-button>
     </template>
   </base-dialog>

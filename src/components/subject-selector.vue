@@ -7,6 +7,7 @@ import { capitalize, getPluralizedQuantity } from "../utils";
 
 import BaseButton from "./base-button.vue";
 import BaseDropdown, { type DropdownOption } from "./base-dropdown.vue";
+import LeechFlagButton from "./leech-flag-button.vue";
 import SubjectCard from "./subject-card.vue";
 import SubjectChip from "./subject-chip.vue";
 import SubjectSuggestion from "./subject-suggestion.vue";
@@ -220,18 +221,28 @@ const levelSelectionButtonTextMap = computed<Record<number, string>>(() => {
           role="group"
           :aria-label="`Level ${visibleLevel} subjects`"
         >
-          <button
+          <div
             v-for="item in filteredSubjectsByLevel[visibleLevel]"
             :key="item.id"
-            type="button"
-            class="card"
-            :class="{ selected: selectedSubjectIds.has(item.id) }"
-            :aria-pressed="selectedSubjectIds.has(item.id)"
-            :aria-label="`${item.data.characters || 'Radical'}, ${selectedSubjectIds.has(item.id) ? 'selected' : 'not selected'}`"
-            @click="toggleSubject(item)"
+            class="card-wrapper"
           >
-            <subject-card :subject="item" />
-          </button>
+            <button
+              type="button"
+              class="card"
+              :class="{ selected: selectedSubjectIds.has(item.id) }"
+              :aria-pressed="selectedSubjectIds.has(item.id)"
+              :aria-label="`${item.data.characters || 'Radical'}, ${selectedSubjectIds.has(item.id) ? 'selected' : 'not selected'}`"
+              @click="toggleSubject(item)"
+            >
+              <subject-card :subject="item" />
+            </button>
+            <leech-flag-button
+              class="card-flag"
+              :subject-id="item.id"
+              :label="item.data.characters || 'radical'"
+              size="14px"
+            />
+          </div>
         </div>
       </details>
     </div>
@@ -266,13 +277,6 @@ const levelSelectionButtonTextMap = computed<Record<number, string>>(() => {
     "filters" auto
     "levels" 1fr
     "selection-summary" auto / 1fr;
-}
-
-.controls {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  grid-column: 1 / -1;
 }
 
 .tabs {
@@ -532,7 +536,6 @@ const levelSelectionButtonTextMap = computed<Record<number, string>>(() => {
   box-shadow: var(--shadow-md);
   gap: 10px;
   grid-area: levels;
-  grid-column: 1 / 2;
 }
 
 .level-section {
@@ -578,6 +581,26 @@ const levelSelectionButtonTextMap = computed<Record<number, string>>(() => {
   gap: 10px;
 }
 
+.card-wrapper {
+  position: relative;
+  display: flex;
+}
+
+.card-wrapper .card-flag {
+  position: absolute;
+  z-index: 1;
+  top: 2px;
+  right: 2px;
+  padding: 2px;
+  opacity: 0;
+}
+
+.card-wrapper .card-flag:focus-visible,
+.card-wrapper .card-flag.flagged,
+.card-wrapper:hover .card-flag {
+  opacity: 1;
+}
+
 .card {
   padding: 0;
   border: 2px solid transparent;
@@ -613,7 +636,6 @@ const levelSelectionButtonTextMap = computed<Record<number, string>>(() => {
   );
   box-shadow: var(--shadow-md);
   grid-area: selection-summary;
-  grid-column: 1 / -1;
 }
 
 .summary-header {
@@ -661,12 +683,10 @@ const levelSelectionButtonTextMap = computed<Record<number, string>>(() => {
 
   .tabs {
     width: 100%;
-    justify-content: stretch;
   }
 
   .tab {
     flex: 1;
-    justify-content: center;
     padding: 0.6rem 0.5rem;
     font-size: 0.85rem;
     text-align: center;

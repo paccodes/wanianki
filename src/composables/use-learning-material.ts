@@ -9,6 +9,7 @@ import { KANJI_KEY, RADICAL_KEY, VOCABULARY_KEY } from "../storage-keys";
 import type {
   Kanji,
   Radical,
+  ReviewSubject,
   SubjectResponse,
   SubjectResponseWithSrsStage,
   Vocabulary,
@@ -33,6 +34,16 @@ export const subjectCollection = {
   radical: radicalCollection,
   vocabulary: vocabularyCollection,
 };
+
+export const allSubjects = computed<ReviewSubject[]>(() => [
+  ...radicalCollection.value,
+  ...kanjiCollection.value,
+  ...vocabularyCollection.value,
+]);
+
+export const subjectsById = computed<Map<number, ReviewSubject>>(
+  () => new Map(allSubjects.value.map((subject) => [subject.id, subject])),
+);
 
 export const useLearningMaterial = (
   userLevel: number,
