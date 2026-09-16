@@ -37,6 +37,7 @@ import {
   getSortedLeeches,
   getStatisticalLeechScores,
   getSubjectIdsByCharacters,
+  getToggledArray,
   resolveCuratedLeeches,
 } from "../utils";
 
@@ -228,9 +229,7 @@ const isManualLeech = (subjectId: number): boolean =>
   manualLeechIdSet.value.has(subjectId);
 
 const toggleManualLeech = (subjectId: number): void => {
-  manualLeechIds.value = isManualLeech(subjectId)
-    ? manualLeechIds.value.filter((id) => id !== subjectId)
-    : [...manualLeechIds.value, subjectId];
+  manualLeechIds.value = getToggledArray(manualLeechIds.value, subjectId);
 };
 
 const isCuratedListEnabled = (listId: string): boolean =>
@@ -239,9 +238,7 @@ const isCuratedListEnabled = (listId: string): boolean =>
 const toggleCuratedList = (listId: string): void => {
   filters.value = {
     ...filters.value,
-    curatedListIds: isCuratedListEnabled(listId)
-      ? filters.value.curatedListIds.filter((enabled) => enabled !== listId)
-      : [...filters.value.curatedListIds, listId],
+    curatedListIds: getToggledArray(filters.value.curatedListIds, listId),
   };
 };
 
@@ -251,9 +248,7 @@ const isSourceEnabled = (source: LeechSource): boolean =>
 const toggleSource = (source: LeechSource): void => {
   filters.value = {
     ...filters.value,
-    sources: isSourceEnabled(source)
-      ? filters.value.sources.filter((enabled) => enabled !== source)
-      : [...filters.value.sources, source],
+    sources: getToggledArray(filters.value.sources, source),
   };
 };
 

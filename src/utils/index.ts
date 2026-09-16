@@ -36,6 +36,7 @@ export { getSubjectTypesQueryParameter } from "./get-subject-types-query-paramet
 export { getSubjectsUrl } from "./get-subjects-url";
 export { getSubjectsWithSrsStages } from "./get-subjects-with-srs-stages";
 export { getTagline } from "./get-tagline";
+export { getToggledArray } from "./get-toggled-array";
 export { getVocabularyReadings } from "./get-vocabulary-readings";
 export { isQuizType } from "./is-quiz-type";
 export { isSubjectType } from "./is-subject-type";
