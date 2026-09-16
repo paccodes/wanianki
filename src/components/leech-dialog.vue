@@ -53,13 +53,6 @@ const sourceInfo: Record<LeechSource, SourceInfo> = {
   },
 };
 
-const sourceTitles: Record<LeechSource, string> = Object.fromEntries(
-  Object.entries(sourceInfo).map(([source, { label, description }]) => [
-    source,
-    `${label}: ${description.toLowerCase()}`,
-  ]),
-) as Record<LeechSource, string>;
-
 const emit = defineEmits<{
   drill: [subjectIds: number[]];
   sync: [];
@@ -124,11 +117,11 @@ const curatedNotice = computed<string>(() => {
     : "None of the selected groups holds an item you are currently missing. Pick Everything to drill them anyway.";
 });
 
-const getScoreLabel = (score: number): string =>
-  score > 0 ? score.toFixed(1) : "";
+const getSourceTitle = (source: LeechSource): string =>
+  `${sourceInfo[source].label}: ${sourceInfo[source].description.toLowerCase()}`;
 
 const getScoreTitle = (score: number): string =>
-  `Leech score ${getScoreLabel(score)}: wrong answers weighed against your current streak. The higher it is, the more this item keeps tripping you up.`;
+  `Leech score ${score.toFixed(1)}: wrong answers weighed against your current streak. The higher it is, the more this item keeps tripping you up.`;
 
 const handleOpen = () => {
   baseDialogRef.value?.open();
@@ -236,7 +229,7 @@ defineExpose({
               v-for="source in leech.sources"
               :key="source"
               class="source-badge"
-              :title="sourceTitles[source]"
+              :title="getSourceTitle(source)"
               :aria-label="sourceInfo[source].label"
             >
               <base-icon
@@ -253,7 +246,7 @@ defineExpose({
           class="score"
           :title="getScoreTitle(leech.score)"
         >
-          {{ getScoreLabel(leech.score) }}
+          {{ leech.score.toFixed(1) }}
         </span>
         <leech-flag-button
           :subject-id="leech.subjectId"
