@@ -5,12 +5,11 @@ import type { ReviewSubject } from "../types";
 
 import { subjectsById, useLearningMaterial } from "./use-learning-material";
 import { useReviewNavigationPaths } from "./use-review-navigation-paths";
+import { isQuizMode, shouldShuffle } from "./use-review-preferences";
 
 interface ReturnValue {
   selectedSubjectIds: Ref<Set<number>>;
   selectedSubjects: ComputedRef<ReviewSubject[]>;
-  shouldShuffle: Ref<boolean>;
-  isQuizMode: Ref<boolean>;
   isLoading: ComputedRef<boolean>;
   addSubjectId: (id: number) => void;
   deleteSubjectId: (id: number) => void;
@@ -28,9 +27,6 @@ export const useReviewSelection = (userLevel: number): ReturnValue => {
       .map((id) => subjectsById.value.get(id))
       .filter((subject): subject is ReviewSubject => subject !== undefined),
   );
-
-  const shouldShuffle = ref<boolean>(false);
-  const isQuizMode = ref<boolean>(false);
 
   const isLoading = useLearningMaterial(userLevel);
 
@@ -66,8 +62,6 @@ export const useReviewSelection = (userLevel: number): ReturnValue => {
   return {
     selectedSubjectIds,
     selectedSubjects,
-    shouldShuffle,
-    isQuizMode,
     isLoading,
     addSubjectId,
     deleteSubjectId,

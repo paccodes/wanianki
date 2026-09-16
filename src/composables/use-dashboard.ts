@@ -11,8 +11,6 @@ interface ReturnValue {
   level: ComputedRef<number | undefined>;
   selectedSubjectIds: Ref<Set<number>>;
   selectedSubjects: ComputedRef<ReviewSubject[]>;
-  shouldShuffle: Ref<boolean>;
-  isQuizMode: Ref<boolean>;
   isLoading: ComputedRef<boolean>;
   canReview: ComputedRef<boolean>;
   handleLoadDeck: (deckId: string | null, subjectIds: number[]) => void;
@@ -36,8 +34,6 @@ export const useDashboard = (
   const {
     selectedSubjectIds,
     selectedSubjects,
-    shouldShuffle,
-    isQuizMode,
     isLoading,
     addSubjectId,
     deleteSubjectId,
@@ -49,8 +45,6 @@ export const useDashboard = (
       : {
           selectedSubjectIds: ref<Set<number>>(new Set<number>()),
           selectedSubjects: computed<ReviewSubject[]>(() => []),
-          shouldShuffle: ref<boolean>(false),
-          isQuizMode: ref<boolean>(false),
           isLoading: computed<boolean>(() => true),
           addSubjectId: () => {},
           deleteSubjectId: () => {},
@@ -105,8 +99,6 @@ export const useDashboard = (
     level,
     selectedSubjectIds,
     selectedSubjects,
-    shouldShuffle,
-    isQuizMode,
     isLoading,
     canReview,
     handleLoadDeck,

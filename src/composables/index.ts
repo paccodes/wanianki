@@ -13,6 +13,7 @@ export { useQuizSummary } from "./use-quiz-summary";
 export { useRefreshData } from "./use-refresh-data";
 export { useSrsStages } from "./use-srs-stages";
 export { useReviewCounter } from "./use-review-counter";
+export { isQuizMode, shouldShuffle } from "./use-review-preferences";
 export { useReviewSelection } from "./use-review-selection";
 export { useStudyNavigation } from "./use-study-navigation";
 export { useSubjectSelection } from "./use-subject-selection";

@@ -13,6 +13,8 @@ import {
   SubjectSelector,
 } from "../components";
 import {
+  isQuizMode,
+  shouldShuffle,
   useDashboard,
   useDecks,
   useLeeches,
@@ -41,8 +43,6 @@ const {
   level,
   selectedSubjectIds,
   selectedSubjects,
-  shouldShuffle,
-  isQuizMode,
   isLoading,
   canReview,
   handleLoadDeck,
