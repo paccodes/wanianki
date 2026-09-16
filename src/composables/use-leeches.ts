@@ -101,6 +101,10 @@ const filters = useLocalStorage<LeechFilters>(
   DEFAULT_LEECH_FILTERS,
 );
 
+const updateFilters = (patch: Partial<LeechFilters>): void => {
+  filters.value = { ...filters.value, ...patch };
+};
+
 const availableSubjectIds = computed<Set<number>>(
   () =>
     new Set(
@@ -153,31 +157,32 @@ const curatedGroups = computed<CuratedLeechGroup[]>(() =>
 const curatedScope = computed<CuratedLeechScope>({
   get: () => filters.value.curatedScope,
   set: (curatedScope) => {
-    filters.value = { ...filters.value, curatedScope };
+    updateFilters({ curatedScope });
   },
 });
 
-const curatedLeechGroups = computed<number[][]>(() =>
+const getEnabledCuratedGroups = (
+  enabledListIds: string[],
+  scope: CuratedLeechScope,
+): number[][] =>
   getCuratedLeechGroups({
     groups: curatedGroups.value,
-    enabledListIds: filters.value.curatedListIds,
-    scope: filters.value.curatedScope,
+    enabledListIds,
+    scope,
     strugglingSubjectIds: strugglingSubjectIds.value,
-  }),
+  });
+
+const curatedLeechGroups = computed<number[][]>(() =>
+  getEnabledCuratedGroups(
+    filters.value.curatedListIds,
+    filters.value.curatedScope,
+  ),
 );
 
 const getCuratedIds = (
   enabledListIds: string[],
   scope: CuratedLeechScope,
-): number[] =>
-  getLeechGroupIds(
-    getCuratedLeechGroups({
-      groups: curatedGroups.value,
-      enabledListIds,
-      scope,
-      strugglingSubjectIds: strugglingSubjectIds.value,
-    }),
-  );
+): number[] => getLeechGroupIds(getEnabledCuratedGroups(enabledListIds, scope));
 
 const countsByCuratedList = computed<Record<string, number>>(() =>
   Object.fromEntries(
@@ -236,20 +241,16 @@ const isCuratedListEnabled = (listId: string): boolean =>
   filters.value.curatedListIds.includes(listId);
 
 const toggleCuratedList = (listId: string): void => {
-  filters.value = {
-    ...filters.value,
+  updateFilters({
     curatedListIds: getToggledArray(filters.value.curatedListIds, listId),
-  };
+  });
 };
 
 const isSourceEnabled = (source: LeechSource): boolean =>
   filters.value.sources.includes(source);
 
 const toggleSource = (source: LeechSource): void => {
-  filters.value = {
-    ...filters.value,
-    sources: getToggledArray(filters.value.sources, source),
-  };
+  updateFilters({ sources: getToggledArray(filters.value.sources, source) });
 };
 
 const loadCachedReviewStatistics = async (): Promise<void> => {
