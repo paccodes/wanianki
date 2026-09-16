@@ -21,7 +21,6 @@ import type {
   CuratedLeechScope,
   Leech,
   LeechFilters,
-  LeechItem,
   LeechSource,
   ReviewStatisticResponse,
 } from "../types";
@@ -101,7 +100,7 @@ const filters = useLocalStorage<LeechFilters>(
   DEFAULT_LEECH_FILTERS,
 );
 
-const updateFilters = (patch: Partial<LeechFilters>): void => {
+const updateFilters = (patch: Partial<LeechFilters>) => {
   filters.value = { ...filters.value, ...patch };
 };
 
@@ -164,7 +163,7 @@ const curatedScope = computed<CuratedLeechScope>({
 const getEnabledCuratedGroups = (
   enabledListIds: string[],
   scope: CuratedLeechScope,
-): number[][] =>
+) =>
   getCuratedLeechGroups({
     groups: curatedGroups.value,
     enabledListIds,
@@ -179,10 +178,8 @@ const curatedLeechGroups = computed<number[][]>(() =>
   ),
 );
 
-const getCuratedIds = (
-  enabledListIds: string[],
-  scope: CuratedLeechScope,
-): number[] => getLeechGroupIds(getEnabledCuratedGroups(enabledListIds, scope));
+const getCuratedIds = (enabledListIds: string[], scope: CuratedLeechScope) =>
+  getLeechGroupIds(getEnabledCuratedGroups(enabledListIds, scope));
 
 const countsByCuratedList = computed<Record<string, number>>(() =>
   Object.fromEntries(
@@ -201,7 +198,7 @@ const countsByCuratedScope = computed<Record<CuratedLeechScope, number>>(
   }),
 );
 
-const getPool = (enabledSources: LeechSource[]): LeechItem[] =>
+const getPool = (enabledSources: LeechSource[]) =>
   getPooledLeeches({
     enabledSources,
     statisticalScores: statisticalScores.value,
@@ -230,30 +227,30 @@ const manualLeechIdSet = computed<Set<number>>(
   () => new Set(manualLeechIds.value),
 );
 
-const isManualLeech = (subjectId: number): boolean =>
+const isManualLeech = (subjectId: number) =>
   manualLeechIdSet.value.has(subjectId);
 
-const toggleManualLeech = (subjectId: number): void => {
+const toggleManualLeech = (subjectId: number) => {
   manualLeechIds.value = getToggledArray(manualLeechIds.value, subjectId);
 };
 
-const isCuratedListEnabled = (listId: string): boolean =>
+const isCuratedListEnabled = (listId: string) =>
   filters.value.curatedListIds.includes(listId);
 
-const toggleCuratedList = (listId: string): void => {
+const toggleCuratedList = (listId: string) => {
   updateFilters({
     curatedListIds: getToggledArray(filters.value.curatedListIds, listId),
   });
 };
 
-const isSourceEnabled = (source: LeechSource): boolean =>
+const isSourceEnabled = (source: LeechSource) =>
   filters.value.sources.includes(source);
 
-const toggleSource = (source: LeechSource): void => {
+const toggleSource = (source: LeechSource) => {
   updateFilters({ sources: getToggledArray(filters.value.sources, source) });
 };
 
-const loadCachedReviewStatistics = async (): Promise<void> => {
+const loadCachedReviewStatistics = async () => {
   try {
     const cachedData = await getValue();
 
@@ -277,7 +274,7 @@ const loadCachedReviewStatistics = async (): Promise<void> => {
   }
 };
 
-const fetchReviewStatistics = async (apiKey: string): Promise<void> => {
+const fetchReviewStatistics = async (apiKey: string) => {
   isLoading.value = true;
   apiToken.value = apiKey;
 
