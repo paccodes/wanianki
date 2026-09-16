@@ -1,3 +1,4 @@
+export type { ApiKeyPurpose } from "./api-key";
 export type {
   Assignment,
   AssignmentResponse,

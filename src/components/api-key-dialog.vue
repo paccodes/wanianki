@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
-import { useLeeches, useRefreshData } from "../composables";
+import type { ApiKeyPurpose } from "../types";
 
 import BaseButton from "./base-button.vue";
 import BaseDialog from "./base-dialog.vue";
@@ -9,31 +9,28 @@ import BaseDialog from "./base-dialog.vue";
 interface ApiKeyPrompt {
   description: string;
   submitLabel: string;
-  onSubmit: (apiKey: string) => void;
 }
-
-const { refresh } = useRefreshData();
-const { fetchReviewStatistics } = useLeeches();
 
 const PROMPTS = {
   refresh: {
     description: "Enter your WaniKani API key to check for level changes.",
     submitLabel: "Check for Updates",
-    onSubmit: refresh,
   },
   leeches: {
     description:
       "Enter your WaniKani API key to sync your review statistics and refresh your leeches.",
     submitLabel: "Sync Leeches",
-    onSubmit: fetchReviewStatistics,
   },
-} satisfies Record<string, ApiKeyPrompt>;
+} satisfies Record<ApiKeyPurpose, ApiKeyPrompt>;
 
-type ApiKeyPurpose = keyof typeof PROMPTS;
+const emit = defineEmits<{
+  submit: [apiKey: string, purpose: ApiKeyPurpose];
+}>();
 
 const baseDialogRef = ref<InstanceType<typeof BaseDialog> | null>(null);
 const apiKeyInput = ref<string>("");
-const apiKeyPrompt = ref<ApiKeyPrompt>(PROMPTS.refresh);
+const apiKeyPurpose = ref<ApiKeyPurpose>("refresh");
+const apiKeyPrompt = computed<ApiKeyPrompt>(() => PROMPTS[apiKeyPurpose.value]);
 
 const handleCancel = () => {
   apiKeyInput.value = "";
@@ -44,7 +41,7 @@ const handleSubmit = () => {
   const trimmedKey = apiKeyInput.value.trim();
 
   if (trimmedKey) {
-    apiKeyPrompt.value.onSubmit(trimmedKey);
+    emit("submit", trimmedKey, apiKeyPurpose.value);
 
     handleCancel();
   }
@@ -52,7 +49,7 @@ const handleSubmit = () => {
 
 const open = (purpose: ApiKeyPurpose) => {
   apiKeyInput.value = "";
-  apiKeyPrompt.value = PROMPTS[purpose];
+  apiKeyPurpose.value = purpose;
 
   baseDialogRef.value?.open();
 };

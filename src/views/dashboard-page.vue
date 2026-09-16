@@ -30,14 +30,19 @@ import {
   lightIconPath,
   syncIconPath,
 } from "../icon-paths";
+import type { ApiKeyPurpose } from "../types";
 
 const { theme, toggleTheme } = useTheme();
 
-const { isRefreshing } = useRefreshData();
+const { isRefreshing, refresh } = useRefreshData();
 
 const { decks, saveDeck, removeDeck } = useDecks();
 
-const { leeches, isLoading: isSyncingLeeches } = useLeeches();
+const {
+  leeches,
+  isLoading: isSyncingLeeches,
+  fetchReviewStatistics,
+} = useLeeches();
 
 const {
   level,
@@ -64,6 +69,16 @@ const openDeckDialog = () => {
 
 const openLeechDialog = () => {
   leechDialogRef.value?.open();
+};
+
+const handleApiKeySubmit = (apiKey: string, purpose: ApiKeyPurpose) => {
+  if (purpose === "leeches") {
+    fetchReviewStatistics(apiKey);
+
+    return;
+  }
+
+  refresh(apiKey);
 };
 </script>
 
@@ -180,7 +195,7 @@ const openLeechDialog = () => {
     @drill="handleLoadLeeches"
     @sync="apiKeyDialogRef?.open('leeches')"
   />
-  <api-key-dialog ref="apiKeyDialogRef" />
+  <api-key-dialog ref="apiKeyDialogRef" @submit="handleApiKeySubmit" />
 </template>
 
 <style scoped>
