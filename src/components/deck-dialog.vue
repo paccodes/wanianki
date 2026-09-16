@@ -23,6 +23,10 @@ const emit = defineEmits<{
 const baseDialogRef = ref<InstanceType<typeof BaseDialog> | null>(null);
 const newDeckName = ref<string>("");
 
+const handleOpen = () => {
+  baseDialogRef.value?.open();
+};
+
 const handleClose = () => {
   baseDialogRef.value?.close();
 };
@@ -50,9 +54,8 @@ const handleRemove = (id: string) => {
 };
 
 defineExpose({
-  get dialogRef() {
-    return baseDialogRef.value?.dialogRef;
-  },
+  open: handleOpen,
+  close: handleClose,
 });
 </script>
 

@@ -59,11 +59,11 @@ const leechDialogRef = ref<InstanceType<typeof LeechDialog> | null>(null);
 const apiKeyDialogRef = ref<InstanceType<typeof ApiKeyDialog> | null>(null);
 
 const openDeckDialog = () => {
-  deckDialogRef.value?.dialogRef?.showModal();
+  deckDialogRef.value?.open();
 };
 
 const openLeechDialog = () => {
-  leechDialogRef.value?.dialogRef?.showModal();
+  leechDialogRef.value?.open();
 };
 </script>
 

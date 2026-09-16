@@ -54,7 +54,7 @@ const open = (purpose: ApiKeyPurpose) => {
   apiKeyInput.value = "";
   apiKeyPrompt.value = PROMPTS[purpose];
 
-  baseDialogRef.value?.dialogRef?.showModal();
+  baseDialogRef.value?.open();
 };
 
 defineExpose({ open });

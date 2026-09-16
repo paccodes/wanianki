@@ -130,6 +130,10 @@ const getScoreLabel = (score: number): string =>
 const getScoreTitle = (score: number): string =>
   `Leech score ${getScoreLabel(score)}: wrong answers weighed against your current streak. The higher it is, the more this item keeps tripping you up.`;
 
+const handleOpen = () => {
+  baseDialogRef.value?.open();
+};
+
 const handleClose = () => {
   baseDialogRef.value?.close();
 };
@@ -150,9 +154,8 @@ const handleSync = () => {
 };
 
 defineExpose({
-  get dialogRef() {
-    return baseDialogRef.value?.dialogRef;
-  },
+  open: handleOpen,
+  close: handleClose,
 });
 </script>
 
