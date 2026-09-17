@@ -1,4 +1,3 @@
-import eslintConfigPrettier from "@vue/eslint-config-prettier";
 import {
   defineConfigWithVueTs,
   vueTsConfigs,
@@ -6,7 +5,6 @@ import {
 import eslintPluginPrettier from "eslint-plugin-prettier/recommended";
 import eslintPluginVue from "eslint-plugin-vue";
 import globals from "globals";
-import typescriptEslint from "typescript-eslint";
 
 export default defineConfigWithVueTs([
   {
@@ -18,19 +16,9 @@ export default defineConfigWithVueTs([
     },
   },
   vueTsConfigs.recommended,
-  ...typescriptEslint.configs.recommended,
   ...eslintPluginVue.configs["flat/recommended"],
   {
-    files: ["**/*.vue"],
-    languageOptions: {
-      parserOptions: {
-        parser: typescriptEslint.parser,
-      },
-    },
-  },
-  {
     rules: {
-      ...eslintConfigPrettier.rules,
       "@typescript-eslint/consistent-type-imports": "error",
     },
   },
