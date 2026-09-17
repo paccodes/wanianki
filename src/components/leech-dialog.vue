@@ -44,12 +44,13 @@ const sourceInfo: Record<LeechSource, SourceInfo> = {
     label: "Confusion",
     icon: differenceIconPath,
     description:
-      "Seeded from the kanji you keep missing or flagged, each paired with its unlocked look-alikes",
+      "Seeded from the kanji you keep missing or flagged, each paired with the look-alikes you have unlocked or already miss",
   },
   curated: {
     label: "Curated",
     icon: inventoryIconPath,
-    description: "Bundled look-alike lists shipped with WaniAnki",
+    description:
+      "Bundled lists of commonly confused items shipped with WaniAnki",
   },
 };
 
@@ -203,7 +204,7 @@ defineExpose({
       <p class="curated-hint">
         Struggling only keeps the groups holding an item you already miss;
         Everything keeps every group of the selected lists. A group only ever
-        holds subjects you have unlocked.
+        holds subjects you have unlocked or already miss.
       </p>
     </div>
     <p class="summary">
