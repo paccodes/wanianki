@@ -51,8 +51,12 @@ export const useLogin = (): ReturnValue => {
     try {
       const userData = await refresh();
 
-      if (userData && !isSubscriptionValid(userData?.subscription)) {
+      if (!userData) {
+        apiToken.value = null;
+      } else if (!isSubscriptionValid(userData.subscription)) {
         addNotification("But ouch, invalid user subscription", "error");
+
+        apiToken.value = null;
 
         await setUser(null);
       } else {
