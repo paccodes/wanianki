@@ -6,11 +6,11 @@ A lightweight web application that **fetches review subjects from your WaniKani 
 
 - 📴 **Offline reviews** — review cached subjects without an active network connection.
 - 🎯 **Flexible selection** — filter by subject type, level range, and SRS stage, search by meaning or reading, or toggle entire levels at once.
-- 💾 **Local persistence** — all data is stored in-browser using the OPFS API.
+- 💾 **Local persistence** — WaniKani data is stored in-browser using the OPFS API, while decks, leech pins and preferences live in local storage.
 - 📚 **Two review modes** — study mode for reading content, quiz mode for testing yourself.
 - 🗂️ **Saved review decks** — save your current selection as a named deck and load it later for quick access.
-- 🐛 **Leech drilling** — pool the items you keep missing from your review statistics, your own pins, look-alike kanji and bundled community lists, then drill them as a deck.
-- 🔄 **Sync with WaniKani** — sync your data when you level up to fetch new subjects, re-entering your API token just for that request.
+- 🐛 **Leech drilling** — pool the items you keep missing from your review statistics, your own pins, look-alike kanji and bundled lists of commonly confused items, then drill them as a deck.
+- 🔄 **Sync with WaniKani** — refresh your SRS stages and fetch new subjects when you level up, re-entering your API token just for that request.
 - 📊 **Quiz summary** — view your quiz results and create a new deck from incorrect answers to focus your practice.
 - ⌨️ **Easy keyboard navigation** — use keyboard shortcuts to easily navigate through review subjects.
 - 🔒 **API token safety** — the API token is never written to storage. It is held in memory only while a request is in flight, then discarded.
@@ -21,9 +21,9 @@ A lightweight web application that **fetches review subjects from your WaniKani 
 Provide a valid WaniKani personal access token with `all_data:read` permission.
 
 ![selection-page](./assets/selection-page.png)
-Select subjects using the tabbed filter (radical, kanji, vocabulary), adjust the level range with sliders, filter by SRS stage (Locked, Apprentice, Guru, Master, Enlightened, Burned), or search by meaning or reading with autocomplete suggestions. Browse subjects grouped by level, toggle entire levels at once, or click individual items. Selected subjects appear as removable chips at the bottom. Choose ordered or shuffled review, then start in either study mode or quiz mode.
+Select subjects using the tabbed filter (radical, kanji, vocabulary), adjust the level range with sliders, filter by SRS stage (Locked, Apprentice 1–4, Guru 1–2, Master, Enlightened, Burned), or search by meaning or reading with autocomplete suggestions. Browse subjects grouped by level, toggle entire levels at once, or click individual items. Selected subjects appear as removable chips at the bottom. Choose ordered or shuffled review, then start in either study mode or quiz mode.
 
-When you level up on WaniKani, use the sync button in the header to fetch your new subjects. You'll be prompted to re-enter your API token, which is used only for that request and then discarded.
+Use the sync button in the header to refresh the SRS stages of your subjects, and to fetch your new subjects when you have leveled up on WaniKani. You'll be prompted to re-enter your API token, which is used only for that request and then discarded.
 
 ## Study Mode vs Quiz Mode
 
@@ -45,6 +45,8 @@ After completing a quiz, you'll see a summary of your results with accuracy stat
 
 ## Leeches
 
+![leeches](./assets/leeches.png)
+
 Leeches are the items you keep getting wrong. WaniKani publishes the raw review statistics but never tells you which items have become chronic failures, so WaniAnki works that out itself. Open the leech dialog from the dashboard header to pool them from four sources, then drill the result as a one-off deck.
 
 Every source is a toggle showing how many items it contributes. An item found by more than one source is listed once and labelled with all of them, and statistical leeches carry their score.
@@ -53,7 +55,7 @@ Every source is a toggle showing how many items it contributes. An item found by
 
 Chronic failures computed from your WaniKani review statistics.
 
-They are scored with the formula used by the WaniKani leech-table userscripts, computed separately for meaning and reading. The exponent and the cutoff below are WaniAnki's defaults, not settings:
+They are scored with the formula used by the WaniKani leech-table userscripts, computed separately for meaning and reading, and an item keeps the higher of the two. An item counts as a leech once its score reaches 1. The exponent and that cutoff are WaniAnki's defaults, not settings:
 
 ```
 score = incorrect / max(current_streak, 1) ** 1.5
@@ -67,15 +69,15 @@ Items you pinned yourself with the flag toggle, on any subject card in the dashb
 
 ### Confusion
 
-Kanji you keep missing, paired with the look-alikes WaniKani lists for them, limited to the ones you have already unlocked.
+Kanji you keep missing, paired with the look-alikes WaniKani lists for them, limited to the ones you have already unlocked or already miss.
 
-Confusion groups are always drilled whole — 土 never turns up without 士. Look-alikes you have not unlocked yet are dropped from the group, so a kanji whose look-alikes are all still locked contributes nothing.
+Confusion groups are always drilled whole — 土 never turns up without 士. Look-alikes you have neither unlocked nor already miss are dropped from the group, so a kanji left without any look-alike contributes nothing.
 
 ### Curated
 
-Look-alike kanji groups bundled with WaniAnki, drawn from the pairs the community reports confusing most often.
+Groups of commonly confused items bundled with WaniAnki: look-alike kanji (core and advanced), kun'yomi homophones, on'yomi compound homophones, and transitive / intransitive verb pairs.
 
-Curated lists are selected individually and come with a scope switch: **Struggling only** keeps the groups holding an item you already miss, while **Everything** keeps every group of the selected lists. Their groups are drilled whole on the same terms as confusion groups.
+Curated lists are selected individually and come with a scope switch: **Struggling only** keeps the groups holding an item you already miss, while **Everything** keeps every group of the selected lists. Their groups are drilled whole on the same terms as confusion groups, and a group left with fewer than two items is dropped.
 
 ### Drilling the pool
 
